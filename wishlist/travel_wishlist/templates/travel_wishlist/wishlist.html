@@ -1,0 +1,29 @@
+<h2>Travel wishlist</h2>
+<!-- I use {% } to embed Django template logic.
+ I use {} to displ -->
+<form method="POST" action="{% url 'place_list' %}">
+    {% csrf_token %}
+    {{ new_place_form }}
+    <button type="submit">Add new place</button>
+
+<!-- for each when I have places -->
+{% for place in places %}
+
+<div>
+    {{ place.name }}
+    <form method="POST" action="{% url 'place_was_visited' place.pk %}">
+        {% csrf_token %}
+        <button>Visited</button>
+    </form>
+</div>
+
+{% empty %}
+
+<div>
+    No places in the wishlist.
+</div>
+
+{% endfor %}
+
+<div><a href="{% url 'places_list_visited' %}">Visited places</a></div>
+<div></div><a href="{% url 'about' %}">About</a></form></div>

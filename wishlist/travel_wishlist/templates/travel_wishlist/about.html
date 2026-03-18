@@ -1,0 +1,14 @@
+<h2>About</h2>
+<div><strong>Author:</strong> {{ author }}</div>
+{% if about %}
+
+<div><strong> The author info has been provided </strong></div>
+
+{% endif %}
+<div><strong>About:</strong> {{ about }}</div>
+
+{% for letter in 'hello'%}
+    <div>{{ letter }}</div>
+{% endfor %}
+
+<a href="{% url 'place_list' %}">Back to wishlist</a>
