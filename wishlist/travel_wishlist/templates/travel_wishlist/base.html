@@ -17,13 +17,15 @@
 </head>
 
 <body>
-    <h1>Where do you want to go?</h1>
+    
+    <h1 id="site-header">Where do you want to go?</h1>
 
     {% block content %}
     {% endblock %}
 
 </body>
     <div>
+        <hr>  
         <p>A travel wishlist app built with Django.</p>
         <a class="nav-link" href="{% url 'place_list' %}">Back to wishlist</a>
         <a class="nav-link" href="{% url 'places_list_visited' %}">Visited places</a>
