@@ -1,0 +1,32 @@
+{% load static %}
+
+<!-- Base template for the travel wishlist app 
+ It includes the basic structure and layout of an html page, the other templates
+ will extend this one and just include their specific content.-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link to the Sakura CSS framework for styling -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakura.css/css/sakura.css" type="text/css">
+    <!--Link the custom css file, instead of using path, I can use the static template tag-->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <title>Travel Wishlist</title>
+
+</head>
+
+<body>
+    <h1>Where do you want to go?</h1>
+
+    {% block content %}
+    {% endblock %}
+
+</body>
+    <div>
+        <p>A travel wishlist app built with Django.</p>
+        <a class="nav-link" href="{% url 'place_list' %}">Back to wishlist</a>
+        <a class="nav-link" href="{% url 'places_list_visited' %}">Visited places</a>
+        <a class="nav-link" href="{% url 'about' %}">About</a>
+    </div>
+</html>

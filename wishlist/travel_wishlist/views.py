@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Place
 from .forms import NewPlaceForm
 
@@ -35,7 +35,9 @@ def places_list_visited(request):
 
 def place_was_visited(request, place_pk):
     if request.method == 'POST':
-        place = Place.objects.get(pk=place_pk)
+        #place = Place.objects.get(pk=place_pk)
+        #Get the place object with the given primary key (place_pk) from the database. If no, return a 404 error.
+        place = get_object_or_404(Place, pk=place_pk) 
         place.visited = True
         place.save()
     return redirect('places_list_visited')

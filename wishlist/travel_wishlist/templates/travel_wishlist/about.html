@@ -1,3 +1,9 @@
+<!-- Extends means to import the base template and include its info-->
+{% extends "travel_wishlist/base.html" %}
+
+<!-- Content block means to define the content area for this template
+  based on the base template -->
+{% block content %}
 <h2>About</h2>
 <div><strong>Author:</strong> {{ author }}</div>
 {% if about %}
@@ -11,4 +17,4 @@
     <div>{{ letter }}</div>
 {% endfor %}
 
-<a href="{% url 'place_list' %}">Back to wishlist</a>
+{% endblock %}

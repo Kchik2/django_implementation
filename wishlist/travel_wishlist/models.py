@@ -1,6 +1,6 @@
 from django.db import models
 
-# Create moldels like an ORM like pee wee
+# Create models like an ORM like pee wee
 # The class is the table and the attributes are the columns
 # To update or create tables, implement command python manage.py makemigrations
 # and python manage.py migrate in the terminal
