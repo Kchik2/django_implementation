@@ -1,10 +1,13 @@
 /* Base styles */
 
 #site-header {
-  background: url('../img/jtree.jpg') 0 0 repeat-x !important;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: white;
   padding: 40px 0 40px 0px;
   text-align: center;
+  min-height: 200px;
 }
 
 .nav-link {

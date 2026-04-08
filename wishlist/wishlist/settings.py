@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from pathlib import Path
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,9 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-n(8@4o)t7ln7w94^_un0s=xp4+r6f+*6ffrtu-yb#z#t+ybjo^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.getenv('GAE_INSTANCE'):
+    DEBUG = False
+else:
+    DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -73,13 +77,28 @@ WSGI_APPLICATION = 'wishlist.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
+# Setting up MySQL database connection for Google Cloud SQL
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'places',
+        'USER': 'traveler',
+        'PASSWORD': os.getenv('TRAVELER_PW'),
+        'HOST': '/cloudsql/django-wishlist-492012:us-central1:wishlist-db-mysql',
+        'PORT': '3306',
     }
 }
+
+#If the application is not running on GAE, use the local db to test and develop.
+if not os.getenv('GAE_INSTANCE'):
+    #DATABASES['default']['HOST'] = '127.0.0.1'
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+    
 
 
 # Password validation
@@ -113,11 +132,34 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
+# Root for collecting static files with collectstatic command
+STATIC_ROOT = os.path.join(BASE_DIR, 'www', 'static')
 
-STATIC_URL = 'static/'
-
-MEDIA_URL = '/media/'
-
+# URL to use when referring to static files located in STATIC_ROOT
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+if not os.getenv('GAE_INSTANCE'):
+    STATIC_URL = '/static/'
+    MEDIA_URL = '/media/'
+else:
+    # Static files (CSS, JavaScript, Images) in bucket over GCP
+    GS_STATIC_FILE_BUCKET = 'django-wishlist-492012.appspot.com'
+    STATIC_URL = f'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
+
+    # Media files stored in GCS (remove MEDIA_ROOT for cloud storage)
+    # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+    # Static files in bucket over GCP. User will fill this bucket.
+    GS_BUCKET_NAME = 'wishlist-user-uploaded-images'
+    MEDIA_URL = f'https://storage.cloud.google.com/{GS_BUCKET_NAME}/media/'
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file('travel_credentials.json')
+    
+    # Configure Django to use Google Cloud Storage for static and media files
+    STORAGES = {
+        'staticfiles':{
+            'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+        },
+        'default': {
+            'BACKEND': 'storages.backends.gcloud.GoogleCloudStorage',
+        }
+    }

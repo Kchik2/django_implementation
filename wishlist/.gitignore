@@ -3,3 +3,6 @@ __pycache__
 .vscode
 .idea
 db.sqlite3
+app.yaml
+travel_credentials.json
+www/
