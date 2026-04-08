@@ -6,3 +6,4 @@ db.sqlite3
 app.yaml
 travel_credentials.json
 www/
+cloud-sql-proxy.exe
